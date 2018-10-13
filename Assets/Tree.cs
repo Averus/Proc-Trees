@@ -12,21 +12,23 @@ public class Tree : MonoBehaviour {
     public List<LimbData> limbData = new List<LimbData>();
 
     
-    //public List<List<Limb>> tree = new List<List<Limb>>();
+    //public List<List<Limb>> limbs = new List<List<Limb>>();
 
-   // public List<Limb> limbs = new List<Limb>();
+    public List<Limb> limbs = new List<Limb>();
 
-    int originX = 0;
-    int originY = 0;
+    public int originX = 0;
+    public int originY = 0;
+
+    public int[] initialDirections = new int[9];
 
 
 
 
     //test stuff below
 
-   
 
-       
+
+
 
 
     // Use this for initialization
@@ -81,15 +83,39 @@ public class Tree : MonoBehaviour {
     }
 
 
-    public void CreateLimb( int x, int y, int generation)
+    public void CreateLimb( int x, int y, int generation, int[] directions)
     {
-        LimbData l = limbData[generation];
-
+       
         Limb limb = new Limb();
+        limb.parentTree = this;
+        limb.texture = texture;
+        limb.currentX = x;
+        limb.currentY = y;
+        limb.generation = generation;
+
+        LimbData l = new LimbData();
+        l.maxLength = limbData[generation].maxLength;
+        l.maxWidth = limbData[generation].maxWidth;
+        l.minWidth = limbData[generation].minWidth;
+        l.curveAggression = limbData[generation].curveAggression;
+        l.directions = directions; //directions are given as an argument because they are local, individual to each limb
+
+        l.childGeneration = limbData[generation].childGeneration;
+        l.minPercentageGrowthForChild = limbData[generation].minPercentageGrowthForChild;
+        l.childProbability = limbData[generation].childProbability;
+        l.maxChildren = limbData[generation].maxChildren;
+        l.childSplitDirections = limbData[generation].childSplitDirections; //these directions on the other hand are more like instructions for rotating the local direction, so they are inherited.
+
+        l.splitGeneration = limbData[generation].splitGeneration;
+        l.splitProbability = limbData[generation].splitProbability;
+        l.maxSplits = limbData[generation].maxSplits;
+        l.splitDirections = limbData[generation].directions;
+
 
         limb.limbData = l;
 
-            
+        limbs.Add(limb);
+
 
     }
 
@@ -100,7 +126,7 @@ public class Tree : MonoBehaviour {
     {
         for (int i = 0; i < limbs.Count; i++)
         {
-            limbs[i].ChooseDirection();
+            limbs[i].Grow();
         }
         
         
@@ -116,6 +142,7 @@ public class Tree : MonoBehaviour {
             
     }
 
+    /*
     void GenerateBough()
     {
         int[] directions = new int[] { 0, 33, 33, 33, 0, 0, 0, 0, 0 };
@@ -165,10 +192,18 @@ public class Tree : MonoBehaviour {
 
     }
 
+    */
+
     // Update is called once per frame
     void Update () {
-		
 
 
-	}
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            CreateLimb(originX, originY, 0, initialDirections);
+            InvokeRepeating("Grow", 1.0f, 0.05f);
+            //InvokeRepeating("FillOut", 10.0f, 0.05f);
+        }
+
+    }
 }

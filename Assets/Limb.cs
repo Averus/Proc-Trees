@@ -6,7 +6,7 @@ using UnityEngine;
 public class Limb {
 
     public Tree parentTree;
-    Texture2D texture; //the texture to be drawn on
+    public Texture2D texture; //the texture to be drawn on
     public List<Vector3> points = new List<Vector3>(); //x and y for coordinates, Z for size
 
     System.Random rng = new System.Random();
@@ -299,7 +299,59 @@ public class Limb {
 
     public void Split()
     {
+        int[] rotatedDirections = limbData.directions; //the childs default direction is the same as the parent
 
+        int direction = ChooseDirection(limbData.splitDirections); //the directions will get shifted locally, imagining that direcion 1 (up) is the current direction
+
+        switch (direction)
+        {
+            case 0:
+                //top left from parent direction...
+                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                break;
+
+            case 1://up from parent direction (so continuing in parent direction - no change)...
+                break;
+
+            case 2://top right from parent direction...
+                rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                break;
+
+            case 3:
+                rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                break;
+
+            case 4:
+                rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                break;
+
+            case 5:
+                rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                break;
+
+            case 6:
+                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                break;
+
+            case 7:
+                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                break;
+
+            case 8:
+                break;
+        }
+
+        //tell the Tree to grow the a limb of the child generation with the rotatedDirections
+        parentTree.CreateLimb(currentX, currentY, limbData.splitGeneration, rotatedDirections);
     }
 
     public void SproutChild()
@@ -357,11 +409,12 @@ public class Limb {
         }
 
         //tell the Tree to grow the a limb of the child generation with the rotatedDirections
-        parentTree.limbs.Add(new Limb(this.parentTree, (int)limbData.childMaxLength, (int)GetMaxWidth(), limbData.childMinWidth, limbData.childCurveAggression, rotatedDirections, currentX, currentY, Color.black, texture));
+        parentTree.CreateLimb(currentX, currentY, limbData.childGeneration, rotatedDirections);
 
         
     }
 
+    /*
     public void Sprout(string direction)
     {
         if (limbData.minWidth > 1)
@@ -408,6 +461,7 @@ public class Limb {
 
         }
         }
+        */
 
     void AddPoint()
     {
@@ -419,14 +473,15 @@ public class Limb {
         texture.Apply();
 
         //test stuff below
-        if (points.Count == limbData.maxLength && limbData.minWidth > 1)
+        
+        if (points.Count == limbData.maxLength) //I redid this somewhere, sometimes the percentage calculation is not right (ending on 99.2 for example)...or does this fix that?
         {
-            Sprout("left");
-            Sprout("right");
+            Split();
         }
 
-
-        ChooseToSprout();
+        
+        //ChooseToSproutChild();
+       
 
         //end test stuff
 
@@ -445,6 +500,23 @@ public class Limb {
             }
         }
     }
+
+    public void ChooseToSplit()
+    {
+
+        for (int i = 0; i < limbData.maxSplits; i++)
+        {
+            if (rng.Next(100) < (limbData.splitProbability * 100))
+            {
+                Split();
+                
+            }
+        }
+           
+        
+    }
+
+
 
     float GetMaxWidth()
     {
@@ -1139,21 +1211,7 @@ public class Limb {
     return total;
 }
 
-public Limb(Tree parentTree, int generation, int originX, int originY, Color col, Texture2D texture)
-    {
 
-
-        this.parentTree = parentTree;
-        this.generation = generation;
-        currentX = originX;
-        currentY = originY;
-        colour = col;
-        this.texture = texture;
-        sumDirections = SumArray(limbData.directions);
-
-       
-
-    }
 
 
 

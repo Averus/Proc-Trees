@@ -5,6 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class LimbOld {
 
+    /*
+
     public Tree parentTree;
     Texture2D texture; //the texture to be drawn on
     public List<Vector3> points = new List<Vector3>(); //x and y for coordinates, Z for size
@@ -372,7 +374,7 @@ public class LimbOld {
                 break;
         }
 
-        parentTree.limbs.Add(new Limb(this.parentTree, (int)childMaxLength, (int)GetMaxWidth(), childMinWidth, childCurveAggression, newDirections, currentX, currentY, Color.black, texture));
+        //parentTree.limbs.Add(new Limb(this.parentTree, (int)childMaxLength, (int)GetMaxWidth(), childMinWidth, childCurveAggression, newDirections, currentX, currentY, Color.black, texture));
 
 
 
@@ -410,7 +412,7 @@ public class LimbOld {
                     newMinWidth = (int)minWidth - 2;
                 }
 
-                parentTree.limbs.Add(new Limb(this.parentTree,((int)(maxLength /2)), (int)GetMaxWidth(), newMinWidth, 0.3f, newDirections, currentX, currentY, Color.black, texture));
+                //parentTree.limbs.Add(new Limb(this.parentTree,((int)(maxLength /2)), (int)GetMaxWidth(), newMinWidth, 0.3f, newDirections, currentX, currentY, Color.black, texture));
                 return;
             }
 
@@ -436,7 +438,7 @@ public class LimbOld {
                     newMinWidth = (int)minWidth - 2;
                 }
 
-                parentTree.limbs.Add(new Limb(this.parentTree, ((int)(maxLength /2)), (int)GetMaxWidth(), newMinWidth, 0.3f, newDirections, currentX, currentY, Color.black, texture));
+                //parentTree.limbs.Add(new Limb(this.parentTree, ((int)(maxLength /2)), (int)GetMaxWidth(), newMinWidth, 0.3f, newDirections, currentX, currentY, Color.black, texture));
                 return;
             }
         
@@ -464,7 +466,7 @@ public class LimbOld {
                     newMinWidth = (int)minWidth - 2;
                 }
 
-                parentTree.limbs.Add(new Limb(this.parentTree, ((int)(maxLength  /2)), (int)GetMaxWidth(), newMinWidth, 0.3f, newDirections, currentX, currentY, Color.black, texture));
+               // parentTree.limbs.Add(new Limb(this.parentTree, ((int)(maxLength  /2)), (int)GetMaxWidth(), newMinWidth, 0.3f, newDirections, currentX, currentY, Color.black, texture));
                 return;
 
 
@@ -483,7 +485,7 @@ public class LimbOld {
                     newMinWidth = (int)minWidth - 2;
                 }
 
-                parentTree.limbs.Add(new Limb(this.parentTree, ((int)(maxLength /2)), (int)GetMaxWidth(), newMinWidth, 0.3f, newDirections, currentX, currentY, Color.black, texture));
+               // parentTree.limbs.Add(new Limb(this.parentTree, ((int)(maxLength /2)), (int)GetMaxWidth(), newMinWidth, 0.3f, newDirections, currentX, currentY, Color.black, texture));
                 return;
             }
 
@@ -593,7 +595,7 @@ public class LimbOld {
         }
 
         return 1;
-        */
+        
     }
 
     public void FillOut()
@@ -1249,6 +1251,6 @@ public LimbOld(Tree parentTree, int maxLength, int maxWidth, int minWidth, float
 
 
 
-
+    */
 
 }
