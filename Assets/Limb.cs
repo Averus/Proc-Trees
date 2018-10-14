@@ -27,7 +27,7 @@ public class Limb {
 
     public void Grow()
     {
-        GrowInDirection(ChooseDirection(limbData.directions));
+        GrowInDirection(ChooseDirection(limbData.growthDirections));
     }
 
     public void GrowInDirection(int direction)
@@ -126,15 +126,15 @@ public class Limb {
         
     }
 
-    public int ChooseDirection(int[] directions)
+    public int ChooseDirection(Directions dir)
     {
         int chosenDirection = rng.Next(sumDirections);
 
         int n = 0;
 
-        for (int i = 0; i < directions.Length; i++)
+        for (int i = 0; i < dir.directions.Length; i++)
         {
-            n += directions[i];
+            n += dir.directions[i];
 
             if (chosenDirection < n)
             {
@@ -167,9 +167,9 @@ public class Limb {
 
             int n = 0;
 
-            for (int i = 0; i < limbData.directions.Length; i++)
+            for (int i = 0; i < limbData.growthDirections.directions.Length; i++)
             {
-                n += limbData.directions[i];
+                n += limbData.growthDirections.directions[i];
 
 
                 if (chosenDirection < n)
@@ -299,65 +299,85 @@ public class Limb {
 
     public void Split()
     {
-        int[] rotatedDirections = limbData.directions; //the childs default direction is the same as the parent
+        Debug.Log("splitting " + limbData.splitDirections.Count);
 
-        int direction = ChooseDirection(limbData.splitDirections); //the directions will get shifted locally, imagining that direcion 1 (up) is the current direction
-
-        switch (direction)
+        for (int i = 0; i < limbData.splitDirections.Count; i++)
         {
-            case 0:
-                //top left from parent direction...
-                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
-                break;
+            Debug.Log("splitting2");
+            for (int ii = 0; ii < limbData.splitDirections[i].directions.Length; ii++)
+            {
+                Debug.Log("splitting3");
+                if (limbData.splitDirections[i].directions[ii] > 0)
+                {
+                    Debug.Log("splitting4");
 
-            case 1://up from parent direction (so continuing in parent direction - no change)...
-                break;
+                    int []rotatedDirections = limbData.growthDirections.directions; //the childs default direction is the same as the parent
 
-            case 2://top right from parent direction...
-                rotatedDirections = shiftDirectionsRight(rotatedDirections);
-                break;
+                    int dir = ii;
 
-            case 3:
-                rotatedDirections = shiftDirectionsRight(rotatedDirections);
-                rotatedDirections = shiftDirectionsRight(rotatedDirections);
-                break;
+                    switch (ii)
+                    {
+                        case 0:
+                            //top left from parent direction...
+                            rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                            break;
 
-            case 4:
-                rotatedDirections = shiftDirectionsRight(rotatedDirections);
-                rotatedDirections = shiftDirectionsRight(rotatedDirections);
-                rotatedDirections = shiftDirectionsRight(rotatedDirections);
-                break;
+                        case 1://up from parent direction (so continuing in parent direction - no change)...
+                            break;
 
-            case 5:
-                rotatedDirections = shiftDirectionsRight(rotatedDirections);
-                rotatedDirections = shiftDirectionsRight(rotatedDirections);
-                rotatedDirections = shiftDirectionsRight(rotatedDirections);
-                rotatedDirections = shiftDirectionsRight(rotatedDirections);
-                break;
+                        case 2://top right from parent direction...
+                            rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                            break;
 
-            case 6:
-                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
-                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
-                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
-                break;
+                        case 3:
+                            rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                            rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                            break;
 
-            case 7:
-                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
-                rotatedDirections = shiftDirectionsLeft(rotatedDirections);
-                break;
+                        case 4:
+                            rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                            rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                            rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                            break;
 
-            case 8:
-                break;
+                        case 5:
+                            rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                            rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                            rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                            rotatedDirections = shiftDirectionsRight(rotatedDirections);
+                            break;
+
+                        case 6:
+                            rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                            rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                            rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                            break;
+
+                        case 7:
+                            rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                            rotatedDirections = shiftDirectionsLeft(rotatedDirections);
+                            break;
+
+                        case 8:
+                            break;
+                    }
+
+                    //tell the Tree to grow the a limb of the child generation with the rotatedDirections
+                    Directions newDirections = new Directions();
+                    newDirections.directions = rotatedDirections;
+
+                    parentTree.CreateLimb(currentX, currentY, limbData.splitGeneration, newDirections);
+                }
+            }
         }
 
-        //tell the Tree to grow the a limb of the child generation with the rotatedDirections
-        parentTree.CreateLimb(currentX, currentY, limbData.splitGeneration, rotatedDirections);
+        
     }
 
     public void SproutChild()
     {
 
-        int[] rotatedDirections = limbData.directions; //the childs default direction is the same as the parent
+        int[] rotatedDirections = limbData.growthDirections.directions; //the childs default direction is the same as the parent
 
         int direction = ChooseDirection(limbData.childSplitDirections); //the directions will get shifted locally, imagining that direcion 1 (up) is the current direction
 
@@ -409,7 +429,10 @@ public class Limb {
         }
 
         //tell the Tree to grow the a limb of the child generation with the rotatedDirections
-        parentTree.CreateLimb(currentX, currentY, limbData.childGeneration, rotatedDirections);
+        Directions newDirections = new Directions();
+        newDirections.directions = rotatedDirections;
+
+        parentTree.CreateLimb(currentX, currentY, limbData.childGeneration, newDirections);
 
         
     }
@@ -480,7 +503,7 @@ public class Limb {
         }
 
         
-        //ChooseToSproutChild();
+        ChooseToSproutChild();
        
 
         //end test stuff
@@ -501,13 +524,20 @@ public class Limb {
         }
     }
 
+
+    /*
     public void ChooseToSplit()
     {
+        
 
         for (int i = 0; i < limbData.maxSplits; i++)
         {
-            if (rng.Next(100) < (limbData.splitProbability * 100))
+            int rand = rng.Next(100);
+            Debug.Log(rand);
+
+            if ( rand < (limbData.splitProbability * 100))
             {
+             
                 Split();
                 
             }
@@ -516,7 +546,7 @@ public class Limb {
         
     }
 
-
+    */
 
     float GetMaxWidth()
     {
@@ -1193,10 +1223,21 @@ public class Limb {
 
 
 
-       
+    public void SumDirections()
+    {
+
+        int total = 0;
+
+        for (int i = 0; i < limbData.growthDirections.directions.Length; i++)
+        {
+            total += limbData.growthDirections.directions[i];
+        }
+
+        sumDirections = total;
+    }
 
 
-    
+
 
     int SumArray(int[] arr)
 {

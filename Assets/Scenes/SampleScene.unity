@@ -355,4 +355,89 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e5ab51e8b2a6df49ac4690b4d2f26fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLimbGeneration: 4
+  initialDirections:
+    directions: 140000006400000014000000000000000000000000000000000000000000000000000000
+  limbData:
+  - color: {r: 0.4811321, g: 0.42348254, b: 0.17475079, a: 0}
+    maxLength: 40
+    maxWidth: 10
+    minWidth: 8
+    curveAggression: 0.25
+    growthDirections:
+      directions: 000000000000000000000000000000000000000000000000000000000000000000000000
+    splitGeneration: 1
+    splitDirections:
+    - directions: 210000000000000021000000000000000000000000000000000000000000000000000000
+    childGeneration: 2
+    minPercentageGrowthForChild: 0.2
+    childProbability: 0.05
+    maxChildren: 0
+    childSplitDirections:
+      directions: 000000000000000000000000000000000000000000000000000000000000000000000000
+  - color: {r: 0, g: 0, b: 0, a: 0}
+    maxLength: 40
+    maxWidth: 8
+    minWidth: 6
+    curveAggression: 0.25
+    growthDirections:
+      directions: 000000000000000000000000000000000000000000000000000000000000000000000000
+    splitGeneration: 2
+    splitDirections:
+    - directions: 160000000000000016000000000000000000000000000000000000000000000000000000
+    childGeneration: 2
+    minPercentageGrowthForChild: 0.2
+    childProbability: 0.1
+    maxChildren: 0
+    childSplitDirections:
+      directions: 000000000000000000000000000000000000000000000000000000000000000000000000
+  - color: {r: 0, g: 0, b: 0, a: 0}
+    maxLength: 25
+    maxWidth: 6
+    minWidth: 3
+    curveAggression: 0.3
+    growthDirections:
+      directions: 000000000000000000000000000000000000000000000000000000000000000000000000
+    splitGeneration: 3
+    splitDirections:
+    - directions: 0b0000000b0000000b000000000000000000000000000000000000000000000000000000
+    childGeneration: 3
+    minPercentageGrowthForChild: 0.2
+    childProbability: 0.1
+    maxChildren: 0
+    childSplitDirections:
+      directions: 000000000000000000000000000000000000000000000000000000000000000000000000
+  - color: {r: 0, g: 0, b: 0, a: 0}
+    maxLength: 20
+    maxWidth: 3
+    minWidth: 2
+    curveAggression: 0.25
+    growthDirections:
+      directions: 000000000000000000000000000000000000000000000000000000000000000000000000
+    splitGeneration: 4
+    splitDirections:
+    - directions: 020000000000000002000000000000000000000000000000000000000000000000000000
+    childGeneration: 0
+    minPercentageGrowthForChild: 0
+    childProbability: 0
+    maxChildren: 0
+    childSplitDirections:
+      directions: 000000000000000000000000000000000000000000000000000000000000000000000000
+  - color: {r: 0, g: 0, b: 0, a: 0}
+    maxLength: 20
+    maxWidth: 2
+    minWidth: 1
+    curveAggression: 0.25
+    growthDirections:
+      directions: 000000000000000000000000000000000000000000000000000000000000000000000000
+    splitGeneration: 0
+    splitDirections: []
+    childGeneration: 0
+    minPercentageGrowthForChild: 0
+    childProbability: 0
+    maxChildren: 0
+    childSplitDirections:
+      directions: 000000000000000000000000000000000000000000000000000000000000000000000000
   limbs: []
+  originX: 0
+  originY: 0

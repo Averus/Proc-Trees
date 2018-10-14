@@ -6,9 +6,10 @@ public class Tree : MonoBehaviour {
 
 
     Texture2D texture; //the texture to be drawn on
-    int[,] map = new int[128, 128]; //a representation of the texture
+    //int[,] map = new int[60, 60]; //a representation of the texture
 
     public int maxLimbGeneration = 4;
+    public Directions initialDirections = new Directions();
     public List<LimbData> limbData = new List<LimbData>();
 
     
@@ -19,7 +20,7 @@ public class Tree : MonoBehaviour {
     public int originX = 0;
     public int originY = 0;
 
-    public int[] initialDirections = new int[9];
+    
 
 
 
@@ -34,15 +35,17 @@ public class Tree : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        texture = new Texture2D(300, 300);
+        texture = new Texture2D(250, 250);
         texture.filterMode = FilterMode.Point;
         GetComponent<Renderer>().material.mainTexture = texture;
         originX = texture.width / 2;
-        originY = 63;
+        originY = 23;
+
+        //initialDirections.directions = new int[]{ 33,33,33,0,0,0,0,0,0};
 
 
 
-        CreateLimbData();
+        //CreateLimbData();
 
 
 
@@ -83,9 +86,10 @@ public class Tree : MonoBehaviour {
     }
 
 
-    public void CreateLimb( int x, int y, int generation, int[] directions)
+    public void CreateLimb( int x, int y, int generation, Directions dir)
     {
        
+        //limb information
         Limb limb = new Limb();
         limb.parentTree = this;
         limb.texture = texture;
@@ -93,26 +97,37 @@ public class Tree : MonoBehaviour {
         limb.currentY = y;
         limb.generation = generation;
 
+
         LimbData l = new LimbData();
+
+        //information for this limbs growth
         l.maxLength = limbData[generation].maxLength;
         l.maxWidth = limbData[generation].maxWidth;
         l.minWidth = limbData[generation].minWidth;
         l.curveAggression = limbData[generation].curveAggression;
-        l.directions = directions; //directions are given as an argument because they are local, individual to each limb
+        l.growthDirections = dir; //directions are given as an argument because they are local, individual to each limb
 
+
+        //information about splitting behaviour
+        l.splitGeneration = limbData[generation].splitGeneration;
+        //l.splitProbability = limbData[generation].splitProbability;
+        //l.maxSplits = limbData[generation].maxSplits;
+        l.splitDirections = limbData[generation].splitDirections;
+
+
+        //information about child growth behaviour
         l.childGeneration = limbData[generation].childGeneration;
         l.minPercentageGrowthForChild = limbData[generation].minPercentageGrowthForChild;
         l.childProbability = limbData[generation].childProbability;
         l.maxChildren = limbData[generation].maxChildren;
         l.childSplitDirections = limbData[generation].childSplitDirections; //these directions on the other hand are more like instructions for rotating the local direction, so they are inherited.
 
-        l.splitGeneration = limbData[generation].splitGeneration;
-        l.splitProbability = limbData[generation].splitProbability;
-        l.maxSplits = limbData[generation].maxSplits;
-        l.splitDirections = limbData[generation].directions;
+       
 
 
         limb.limbData = l;
+
+        limb.SumDirections();
 
         limbs.Add(limb);
 
@@ -202,7 +217,7 @@ public class Tree : MonoBehaviour {
         {
             CreateLimb(originX, originY, 0, initialDirections);
             InvokeRepeating("Grow", 1.0f, 0.05f);
-            //InvokeRepeating("FillOut", 10.0f, 0.05f);
+            InvokeRepeating("FillOut", 10.0f, 0.05f);
         }
 
     }

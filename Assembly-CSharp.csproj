@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Branch.cs" />
+    <Compile Include="Assets\Directions.cs" />
     <Compile Include="Assets\Limb.cs" />
     <Compile Include="Assets\LimbData.cs" />
     <Compile Include="Assets\LimbOld.cs" />
